@@ -151,3 +151,30 @@ router.put('/api/users/:id', (req, res) => {
     }
   });
 });
+
+router.delete('/api/users/:id', (req, res) => {
+  const userId = req.url?.split('/')[3] || '';
+
+  if (!userId) {
+    return sendJson(res, 400, { message: 'User ID is required' });
+  }
+
+  if (!validate(userId)) {
+    return sendJson(res, 400, {
+      message: `User ID=${userId} is invalid (not uuid)`,
+    });
+  }
+
+  const userIdx = users.findIndex((user) => user.id === userId);
+
+  if (userIdx === -1) {
+    return sendJson(res, 404, {
+      message: `User with ID=${userId} doesn't exist`,
+    });
+  }
+
+  users.splice(userIdx, 1);
+
+  res.writeHead(204);
+  res.end();
+});
