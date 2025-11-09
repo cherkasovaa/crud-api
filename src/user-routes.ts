@@ -1,10 +1,11 @@
 import { v4 as uuidv4, validate } from 'uuid';
 import Router from './router.ts';
+import type { User } from './types.ts';
 import { sendJson } from './utils.ts';
 
 export const router = new Router();
 
-const users = [
+const users: User[] = [
   { id: uuidv4(), username: 'Vitaliy', age: 22, hobbies: [] },
   { id: uuidv4(), username: 'Nadya', age: 28, hobbies: [] },
   { id: uuidv4(), username: 'Artem', age: 30, hobbies: [] },
@@ -33,4 +34,51 @@ router.get('/api/users/:id', (req, res) => {
   }
 
   sendJson(res, 200, user);
+});
+
+router.post('/api/users', (req, res) => {
+  let body = '';
+
+  req.on('data', (chunk) => {
+    body += chunk.toString();
+  });
+
+  req.on('end', () => {
+    try {
+      const userRequest: Omit<User, 'id'> = JSON.parse(body);
+
+      const { username, age, hobbies } = userRequest;
+
+      if (!username || !age || !hobbies) {
+        return sendJson(res, 400, {
+          message: `Request body does not contains required fields (username, age, hobbies)`,
+        });
+      }
+
+      if (
+        typeof username !== 'string' ||
+        typeof age !== 'number' ||
+        !Array.isArray(hobbies)
+      ) {
+        return sendJson(res, 400, {
+          message: `Invalid data types for fields. The username must be a string, age must be a number, hobbies must be an array of strings)`,
+        });
+      }
+
+      const user: User = {
+        id: uuidv4(),
+        username,
+        age,
+        hobbies,
+      };
+
+      users.push(user);
+
+      sendJson(res, 201, user);
+    } catch (err) {
+      return sendJson(res, 400, {
+        message: `'Invalid request body: not a valid JSON`,
+      });
+    }
+  });
 });

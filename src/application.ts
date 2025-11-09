@@ -1,7 +1,5 @@
 import EventEmitter from 'events';
 import http from 'http';
-// import Router from './router.ts';
-// import Router from 'router.js';
 import Router from './router.ts';
 import { type Handler, HTTP_METHODS, type HttpMethods } from './types.ts';
 import { sendJson } from './utils.ts';
