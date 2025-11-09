@@ -1,0 +1,39 @@
+{
+  "name": "crud-api",
+  "version": "1.0.0",
+  "description": "Simple CRUD API using in-memory database underneath",
+  "main": "dist/index.js",
+  "scripts": {
+    "start:dev": "nodemon src/index.ts",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "lint": "eslint \"src/**/*.ts\" --fix",
+    "test": "jest --silent",
+    "test:verbose": "jest",
+    "build": "tsc -p tsconfig.build.json",
+    "start:prod": "npm run build && node dist/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cherkasovaa/crud-api.git"
+  },
+  "keywords": [],
+  "author": "Alina Cherkasova",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cherkasovaa/crud-api/issues"
+  },
+  "homepage": "https://github.com/cherkasovaa/crud-api#readme",
+  "devDependencies": {
+    "dotenv": "^17.2.3",
+    "eslint": "^9.39.1",
+    "jest": "^30.2.0",
+    "nodemon": "^3.1.10",
+    "prettier": "^3.6.2",
+    "ts-jest": "^29.4.5",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "uuid": "^13.0.0"
+  }
+}
