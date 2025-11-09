@@ -5,11 +5,12 @@
   "main": "dist/index.js",
   "scripts": {
     "start:dev": "nodemon src/index.ts",
-    "start:prod": "tsc && node dist/index.js",
     "format": "prettier --write \"src/**/*.ts\"",
     "lint": "eslint \"src/**/*.ts\" --fix",
     "test": "jest --silent",
-    "test:verbose": "jest"
+    "test:verbose": "jest",
+    "build": "tsc -p tsconfig.build.json",
+    "start:prod": "npm run build && node dist/index.js"
   },
   "repository": {
     "type": "git",
@@ -18,7 +19,6 @@
   "keywords": [],
   "author": "Alina Cherkasova",
   "license": "ISC",
-  "type": "module",
   "bugs": {
     "url": "https://github.com/cherkasovaa/crud-api/issues"
   },

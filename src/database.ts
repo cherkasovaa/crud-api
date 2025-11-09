@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
-import type { User } from './types.ts';
+import type { User } from './types';
 
 export const USERS: User[] = [
   { id: uuidv4(), username: 'Vitaliy', age: 22, hobbies: [] },

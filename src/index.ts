@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import process from 'process';
-import Application from './application.ts';
-import { router } from './user-routes.ts';
+import Application from './application';
+import { router } from './user-routes';
 
 const PORT = process.env.PORT || '5000';
 

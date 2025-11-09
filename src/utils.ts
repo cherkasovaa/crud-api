@@ -1,6 +1,6 @@
 import { IncomingMessage, ServerResponse } from 'http';
 import { validate } from 'uuid';
-import type { User } from './types.ts';
+import type { User } from './types';
 
 export const sendJson = (
   res: ServerResponse,

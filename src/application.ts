@@ -1,8 +1,8 @@
 import EventEmitter from 'events';
 import http from 'http';
-import Router from './router.ts';
-import { type Handler, HTTP_METHODS, type HttpMethods } from './types.ts';
-import { sendJson } from './utils.ts';
+import Router from './router';
+import { type Handler, HTTP_METHODS, type HttpMethods } from './types';
+import { sendJson } from './utils';
 
 type Server = http.Server<
   typeof http.IncomingMessage,
@@ -12,7 +12,7 @@ type Server = http.Server<
 export default class Application {
   public emitter: EventEmitter;
   public server: Server;
-  public router: Router;
+  // public router: Router;
 
   constructor() {
     this.emitter = new EventEmitter();

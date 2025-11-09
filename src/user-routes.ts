@@ -1,12 +1,12 @@
 import { v4 as uuidv4 } from 'uuid';
-import { USERS } from './database.ts';
-import Router from './router.ts';
-import type { User } from './types.ts';
-import { checkUserId, getUserId, getUserIdx, sendJson } from './utils.ts';
+import { USERS } from './database';
+import Router from './router';
+import type { User } from './types';
+import { checkUserId, getUserId, getUserIdx, sendJson } from './utils';
 
 export const router = new Router();
 
-router.get('/api/users', (req, res) => {
+router.get('/api/users', (_req, res) => {
   sendJson(res, 200, USERS);
 });
 

@@ -1,5 +1,5 @@
-import type { Endpoints, Handler, HttpMethods } from './types.ts';
-import { HTTP_METHODS } from './types.ts';
+import type { Endpoints, Handler, HttpMethods } from './types';
+import { HTTP_METHODS } from './types';
 
 export default class Router {
   public endpoints: Endpoints = {};
