@@ -1,21 +1,16 @@
 import 'dotenv/config';
-import http from 'http';
 import process from 'process';
+import Application from './application.ts';
+import { router } from './user-routes.ts';
 
 const PORT = process.env.PORT || '5000';
 
-const server = http.createServer((req, res) => {
-  res.writeHead(200, {
-    'content-type': 'application/json',
-  });
+const userRouter = router;
 
-  if (req.url === '/api/users') {
-    return res.end(JSON.stringify([{ id: 1, name: 'Alina' }]));
-  }
+const app = new Application();
 
-  res.end(req.url);
-});
+app.addRouter(userRouter);
 
-server.listen(PORT, () => {
-  console.log(`Server has been started on port ${PORT}...`);
-});
+app.listen(PORT, () =>
+  console.log(`Server has been started on port ${PORT}...`),
+);
