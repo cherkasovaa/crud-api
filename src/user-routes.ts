@@ -1,39 +1,25 @@
-import { v4 as uuidv4, validate } from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
+import { USERS } from './database.ts';
 import Router from './router.ts';
 import type { User } from './types.ts';
-import { sendJson } from './utils.ts';
+import { checkUserId, getUserId, getUserIdx, sendJson } from './utils.ts';
 
 export const router = new Router();
 
-const users: User[] = [
-  { id: uuidv4(), username: 'Vitaliy', age: 22, hobbies: [] },
-  { id: uuidv4(), username: 'Nadya', age: 28, hobbies: [] },
-  { id: uuidv4(), username: 'Artem', age: 30, hobbies: [] },
-  { id: uuidv4(), username: 'Vera', age: 18, hobbies: [] },
-];
-
 router.get('/api/users', (req, res) => {
-  sendJson(res, 200, users);
+  sendJson(res, 200, USERS);
 });
 
 router.get('/api/users/:id', (req, res) => {
-  const id = req.url?.split('/')[3] || '';
+  const userId = getUserId(req);
 
-  if (!id) {
-    return sendJson(res, 400, { message: 'User ID is required' });
-  }
+  if (!checkUserId(res, userId)) return;
 
-  if (!validate(id)) {
-    return sendJson(res, 400, { message: 'User ID is invalid (not uuid)' });
-  }
+  const userIdx = getUserIdx(USERS, userId, res);
 
-  const user = users.find((user) => user.id === id);
+  if (userIdx === -1) return;
 
-  if (!user) {
-    return sendJson(res, 404, { message: `User with ID=${id} not found` });
-  }
-
-  sendJson(res, 200, user);
+  sendJson(res, 200, USERS[userIdx]);
 });
 
 router.post('/api/users', (req, res) => {
@@ -72,7 +58,7 @@ router.post('/api/users', (req, res) => {
         hobbies,
       };
 
-      users.push(user);
+      USERS.push(user);
 
       sendJson(res, 201, user);
     } catch (err) {
@@ -92,31 +78,19 @@ router.put('/api/users/:id', (req, res) => {
 
   req.on('end', () => {
     try {
-      const userId = req.url?.split('/')[3] || '';
+      const userId = getUserId(req);
 
-      if (!userId) {
-        return sendJson(res, 400, { message: 'User ID is required' });
-      }
+      if (!checkUserId(res, userId)) return;
 
-      if (!validate(userId)) {
-        return sendJson(res, 400, {
-          message: `User ID=${userId} is invalid (not uuid)`,
-        });
-      }
+      const userIdx = getUserIdx(USERS, userId, res);
 
-      const userIdx = users.findIndex((user) => user.id === userId);
-
-      if (userIdx === -1) {
-        return sendJson(res, 404, {
-          message: `User with ID=${userId} not found`,
-        });
-      }
+      if (userIdx === -1) return;
 
       const userRequest: Partial<Omit<User, 'id'>> = JSON.parse(body);
 
       const { username, age, hobbies } = userRequest;
 
-      const oldDataUser = users[userIdx];
+      const oldDataUser = USERS[userIdx];
 
       if (!oldDataUser) {
         return sendJson(res, 404, {
@@ -141,7 +115,7 @@ router.put('/api/users/:id', (req, res) => {
         });
       }
 
-      users[userIdx] = updatedUser;
+      USERS[userIdx] = updatedUser;
 
       sendJson(res, 200, updatedUser);
     } catch (err) {
@@ -153,27 +127,15 @@ router.put('/api/users/:id', (req, res) => {
 });
 
 router.delete('/api/users/:id', (req, res) => {
-  const userId = req.url?.split('/')[3] || '';
+  const userId = getUserId(req);
 
-  if (!userId) {
-    return sendJson(res, 400, { message: 'User ID is required' });
-  }
+  if (!checkUserId(res, userId)) return;
 
-  if (!validate(userId)) {
-    return sendJson(res, 400, {
-      message: `User ID=${userId} is invalid (not uuid)`,
-    });
-  }
+  const userIdx = getUserIdx(USERS, userId, res);
 
-  const userIdx = users.findIndex((user) => user.id === userId);
+  if (userIdx === -1) return;
 
-  if (userIdx === -1) {
-    return sendJson(res, 404, {
-      message: `User with ID=${userId} doesn't exist`,
-    });
-  }
-
-  users.splice(userIdx, 1);
+  USERS.splice(userIdx, 1);
 
   res.writeHead(204);
   res.end();
